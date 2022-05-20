@@ -20,4 +20,4 @@ def sepFirstLastName(wbIn,wbOut,col,row):
 
     workbook.save(wbOut)
 
-sepFirstLastName("Leeds 2023 Staff List.xlsx","test1.xlsx","A",8)
+sepFirstLastName("Leeds 2023 Staff List.xlsx","test2.xlsx","A",3)
