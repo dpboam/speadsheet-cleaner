@@ -14,7 +14,7 @@ def split_name(data, name, exceptions=None):
 
 def merge_and_tag(data, fields, tags, output_field):
     values = [data.pop(k, None) for k in fields]
-    field = ",".join(
+    field = ";".join(
         [str(v) + ":" + t for v, t in zip(values, tags) if v is not None])
     data[output_field] = field
     return data
