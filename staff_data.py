@@ -15,13 +15,13 @@ def process_staff_data():
 
     record = merge_and_tag(record,
       fields=['Mobile', 'Office No', 'DDL'],
-      tags=['Mobile', 'Office', 'Direct'],
+      tags=['Mobile', 'Work', 'Direct'],
       output_field='Phone'
     )
 
     record = add_fields(record, fields={
-      "Organisation": "Leeds 2023",
-      "Person Tag": "staff"
+      "Organisation": "LEEDS 2023",
+      "Person Type": "Staff"
     })
 
     return record
