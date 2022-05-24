@@ -1,6 +1,6 @@
 def get_fieldnames(data):
-    return list(set([item for row in data for item in row.keys()]))
+    return sorted(list(set([item for row in data for item in row.keys()])))
 
 
 def clean_row(original):
-    return {k: v for k, v in original.items() if v is not None}
+    return {k: v for k, v in original.items() if k is not None and v is not None}

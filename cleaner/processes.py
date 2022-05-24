@@ -1,5 +1,6 @@
 import re
 
+
 def split_name(data, name, exceptions=None):
     output_names = ["First Name", "Surname"]
     sep = r'\s+'
@@ -23,3 +24,11 @@ def merge_and_tag(data, fields, tags, output_field):
 def add_fields(data, fields):
     data.update(fields)
     return data
+
+
+def drop_fields(data, fields):
+    return {k: v for k, v in data.items() if k not in fields}
+
+
+def filter_list(data, field):
+    return [r for r in data if r.get(field, None) is not None]
