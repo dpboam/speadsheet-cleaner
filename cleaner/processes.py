@@ -1,6 +1,7 @@
 import re
 from .util import clean_row
 
+
 def split_name(data, name, exceptions=None):
     output_names = ["First Name", "Surname"]
     sep = r'\s+'
@@ -30,10 +31,6 @@ def drop_fields(data, fields):
     return {k: v for k, v in data.items() if k not in fields}
 
 
-def filter_list(data, field):
-    return [r for r in data if r.get(field, None) is not None]
-
-
 def extract_and_leave_ref(data, fields_to_extract, field_name, key_field, reference_data):
     fields = {k: data.pop(k, None) for k in fields_to_extract}
     ref = fields.get(key_field, None)
@@ -43,8 +40,17 @@ def extract_and_leave_ref(data, fields_to_extract, field_name, key_field, refere
     return data
 
 
+def extract_and_take_ref(data, fields_to_extract, key_field, reference_data):
+    fields = {k: data.pop(k, None) for k in fields_to_extract}
+    ref = data.get(key_field, None)
+    fields[key_field] = ref
+    if ref:
+        reference_data.append(fields)
+    return data
+
+
 def rename_fields(data, name_mapper):
     new_fields = clean_row({new_key: data.pop(old_key, None)
-                  for old_key, new_key in name_mapper.items()})
+                            for old_key, new_key in name_mapper.items()})
     data.update(new_fields)
     return data
