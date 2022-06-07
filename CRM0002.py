@@ -19,7 +19,7 @@ def process_staff_data():
         record = drop_fields(record, ['Relationship Type2'])
 
         record = extract_and_leave_ref(record, ['Main contact', 'Role', 'Email'], 'Main Contact', 'Email', contacts)
-        record = extract_and_leave_ref(record, ['Secondary Contact', 'Role.', 'Email.'], 'Secondary Contact', 'Email', contacts)
+        record = extract_and_leave_ref(record, ['Secondary Contact', 'Role.', 'Email.'], 'Secondary Contact', 'Email.', contacts)
 
         record = drop_fields(record, ['Leeds 2023 Relationship Lead'])
         record = drop_fields(record, ['Leeds 2023 Relationship Support'])
@@ -34,6 +34,7 @@ def process_staff_data():
     def process_contacts(contact):
         contact = rename_fields(contact, {
           'Main contact': 'Name',
+          'Secondary Contact': 'Name',
           'Role.': 'Role',
           'Email.': 'Email'
         })
