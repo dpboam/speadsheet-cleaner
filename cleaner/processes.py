@@ -1,14 +1,19 @@
+import logging
 import re
 from .util import clean_row
 
 
 def split_name(data, name, exceptions=None):
+    if not data or not name in data.keys():
+        return data
     output_names = ["First Name", "Surname"]
     sep = r'\s+'
-    field = data.pop(name)
+    field = data.pop(name).strip()
     splits = exceptions[field] \
-        if field in exceptions \
+        if exceptions and field in exceptions \
         else re.split(sep, field)
+    if len(splits) != len(output_names):
+        logging.warn('Wrong length ({})'.format(field))
     new_fields = dict(zip(output_names, splits))
     data.update(new_fields)
     return data
@@ -51,6 +56,6 @@ def extract_and_take_ref(data, fields_to_extract, key_field, reference_data):
 
 def rename_fields(data, name_mapper):
     new_fields = clean_row({new_key: data.pop(old_key, None)
-                            for old_key, new_key in name_mapper.items()})
+                            for old_key, new_key in name_mapper.items() if old_key in data.keys()})
     data.update(new_fields)
     return data

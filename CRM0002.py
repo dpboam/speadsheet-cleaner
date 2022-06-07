@@ -49,7 +49,13 @@ def process_staff_data():
             'Email.': 'Email'
         })
 
-        # contact = split_name(contact, 'Name')
+        contact = split_name(contact, 'Name', exceptions={
+          "Richard Bickers + Alaistair Gordon": ["Richard", "Bickers"],
+          "Martijn de Lange": ["Martin", "de Lange"],
+          "Professor Charles Egbu": ["Charles", "Egbu (Professor)"],
+          "Eleanor Trigwell or Lee Savage - Was at WNY Property Forum that ASP Presented at 09.09.21": ["Eleanor", "Trigwell"],
+          "Dr Edward Ziff": ["Edward", "Ziff (Dr)"]
+        })
 
         return contact
 
@@ -60,7 +66,7 @@ def process_staff_data():
         })
 
         note = add_fields(note, {
-            'Heading': 'Note imported from original spreadsheet'
+            'Heading': 'Note imported from fundraising spreadsheet'
         })
         return note
 
