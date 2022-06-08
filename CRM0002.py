@@ -1,4 +1,3 @@
-from calendar import c
 from os import chdir
 
 from cleaner.list import split_to_rows_on_field, filter_list
@@ -39,6 +38,10 @@ def process_staff_data():
             record, ['Next Step', 'Due Date', 'Who to complete?'])
         record = drop_fields(record, ['Action Archive'])
 
+        record = add_fields(record, {
+          'Organisation Type': 'Fundraising'
+        })
+
         return record
 
     def process_contacts(contact):
@@ -55,6 +58,10 @@ def process_staff_data():
           "Professor Charles Egbu": ["Charles", "Egbu (Professor)"],
           "Eleanor Trigwell or Lee Savage - Was at WNY Property Forum that ASP Presented at 09.09.21": ["Eleanor", "Trigwell"],
           "Dr Edward Ziff": ["Edward", "Ziff (Dr)"]
+        })
+
+        contact = add_fields(contact, {
+          'Person Type': 'Fundraising'
         })
 
         return contact
