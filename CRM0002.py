@@ -22,9 +22,10 @@ def process_staff_data():
             "Organisation Type": "Fundraising"
         })
 
-        fake_emails = ';'.join(['NOREPLY@{}'.format(x) for x in set([e.split('@')[1].lower() for e in [record.get('Email', None), record.get('Email.', None)] if e and '@' in e ])])
+        fake_emails = ';'.join(['NOREPLY@{}'.format(x) for x in set([e.split('@')[1].lower()
+                               for e in [record.get('Email', None), record.get('Email.', None)] if e and '@' in e])])
         record = add_fields(record, {
-          'Organisation Email': fake_emails
+            'Organisation Email': fake_emails
         })
 
         record = drop_fields(record, ['Relationship Type2'])
@@ -46,7 +47,7 @@ def process_staff_data():
         record = drop_fields(record, ['Action Archive'])
 
         record = add_fields(record, {
-          'Organisation Type': 'Fundraising'
+            'Organisation Type': 'Fundraising'
         })
 
         return record
@@ -60,15 +61,15 @@ def process_staff_data():
         })
 
         contact = split_name(contact, 'Name', exceptions={
-          "Richard Bickers + Alaistair Gordon": ["Richard", "Bickers"],
-          "Martijn de Lange": ["Martin", "de Lange"],
-          "Professor Charles Egbu": ["Charles", "Egbu (Professor)"],
-          "Eleanor Trigwell or Lee Savage - Was at WNY Property Forum that ASP Presented at 09.09.21": ["Eleanor", "Trigwell"],
-          "Dr Edward Ziff": ["Edward", "Ziff (Dr)"]
+            "Richard Bickers + Alaistair Gordon": ["Richard", "Bickers"],
+            "Martijn de Lange": ["Martin", "de Lange"],
+            "Professor Charles Egbu": ["Charles", "Egbu (Professor)"],
+            "Eleanor Trigwell or Lee Savage - Was at WNY Property Forum that ASP Presented at 09.09.21": ["Eleanor", "Trigwell"],
+            "Dr Edward Ziff": ["Edward", "Ziff (Dr)"]
         })
 
         contact = add_fields(contact, {
-          'Person Type': 'Fundraising'
+            'Person Type': 'Fundraising'
         })
 
         return contact
