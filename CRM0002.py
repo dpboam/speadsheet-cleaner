@@ -1,5 +1,7 @@
 from os import chdir
 
+from pip import main
+
 from cleaner.list import split_to_rows_on_field, filter_list
 from cleaner.processes import extract_and_take_ref, add_fields, drop_fields, extract_and_leave_ref, rename_fields, split_name
 from cleaner.reader import load_sheet
@@ -18,6 +20,11 @@ def process_staff_data():
     def process_fundraising_org(record):
         record = add_fields(record, fields={
             "Organisation Type": "Fundraising"
+        })
+
+        fake_emails = ';'.join(['NOREPLY@{}'.format(x) for x in set([e.split('@')[1].lower() for e in [record.get('Email', None), record.get('Email.', None)] if e and '@' in e ])])
+        record = add_fields(record, {
+          'Organisation Email': fake_emails
         })
 
         record = drop_fields(record, ['Relationship Type2'])
