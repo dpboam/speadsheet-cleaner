@@ -1,16 +1,15 @@
-from os import chdir
-
-from pip import main
-
-from cleaner.list import split_to_rows_on_field, filter_list
-from cleaner.processes import extract_and_take_ref, add_fields, drop_fields, extract_and_leave_ref, rename_fields, split_name
-from cleaner.reader import load_sheet
 from cleaner.writer import write_csv
+from cleaner.reader import load_sheet
+from cleaner.processes import extract_and_take_ref, add_fields, drop_fields, extract_and_leave_ref, rename_fields, split_name
+from cleaner.list import split_to_rows_on_field, filter_list
+import logging
+import os
+logging.basicConfig()
 
 
 def process_staff_data():
-    chdir('./data')
-    infile = 'FR Contacts Funding List.xlsx'
+    os.chdir('./data')
+    infile = 'CRM Document 2022 14th June_Aimee 17.40pm.xlsx'
     data = load_sheet(infile, sheet="Corporate")
     data = filter_list(data, 'Name')
 
@@ -35,20 +34,15 @@ def process_staff_data():
         record = extract_and_leave_ref(record, [
                                        'Secondary Contact', 'Role.', 'Email.'], 'Secondary Contact', 'Email.', contacts)
 
-        record = rename_fields(record, {
-            'Leeds 2023 Relationship Lead': 'Relationhip Lead',
-            'Leeds 2023 Relationship Support': 'Relationship Support'
-        })
-
         record = extract_and_take_ref(record, ['Notes'], 'Name', notes)
 
-        record = drop_fields(
-            record, ['Next Step', 'Due Date', 'Who to complete?'])
-        record = drop_fields(record, ['Action Archive'])
-
-        record = add_fields(record, {
-            'Organisation Type': 'Fundraising'
-        })
+        record = rename_fields(
+            record, {
+                'Next Step': 'Fundraising Next Step',
+                'Due Date': 'Fundraising Next Step Due Date',
+                'Who to complete?': 'Fundraising Next Step Assignee',
+                'Action Archive': 'Fundraising Action Archive'
+            })
 
         return record
 
@@ -61,11 +55,10 @@ def process_staff_data():
         })
 
         contact = split_name(contact, 'Name', exceptions={
-            "Richard Bickers + Alaistair Gordon": ["Richard", "Bickers"],
             "Martijn de Lange": ["Martin", "de Lange"],
             "Professor Charles Egbu": ["Charles", "Egbu (Professor)"],
-            "Eleanor Trigwell or Lee Savage - Was at WNY Property Forum that ASP Presented at 09.09.21": ["Eleanor", "Trigwell"],
-            "Dr Edward Ziff": ["Edward", "Ziff (Dr)"]
+            "Dr Edward Ziff": ["Edward", "Ziff (Dr)"],
+            "Sharon Watson MBE, DL": ["Sharon", "Watson (MBE, DL)"]
         })
 
         contact = add_fields(contact, {
