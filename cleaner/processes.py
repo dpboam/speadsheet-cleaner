@@ -3,6 +3,8 @@ import re
 from .util import clean_row
 
 
+logger = logging.getLogger(__name__)
+
 def split_name(data, name, exceptions=None):
     if not data or not name in data.keys():
         return data
@@ -13,7 +15,7 @@ def split_name(data, name, exceptions=None):
         if exceptions and field in exceptions \
         else re.split(sep, field)
     if len(splits) != len(output_names):
-        logging.warn('Wrong length ({})'.format(field))
+        logger.warn('Wrong length ({})'.format(field))
     new_fields = dict(zip(output_names, splits))
     data.update(new_fields)
     return data
