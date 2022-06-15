@@ -37,9 +37,13 @@ def add_fields(data, fields):
 def drop_fields(data, fields):
     return {k: v for k, v in data.items() if k not in fields}
 
+def strip_not_none(thing):
+    if thing is None:
+        return thing
+    return thing.strip()
 
 def extract_and_leave_ref(data, fields_to_extract, field_name, key_field, reference_data):
-    fields = {k: data.pop(k, None) for k in fields_to_extract}
+    fields = {k: strip_not_none(data.pop(k, None)) for k in fields_to_extract}
     ref = fields.get(key_field, None)
     if ref:
         reference_data.append(fields)
