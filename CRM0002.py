@@ -4,7 +4,11 @@ from cleaner.processes import extract_and_take_ref, add_fields, drop_fields, ext
 from cleaner.list import split_to_rows_on_field, filter_list
 import logging
 import os
-logging.basicConfig()
+import urllib.parse
+
+
+logging.basicConfig(level=logging.DEBUG)
+logger = logging.getLogger()
 
 
 def process_staff_data():
@@ -28,6 +32,21 @@ def process_staff_data():
         })
 
         record = drop_fields(record, ['Relationship Type2'])
+
+        def make_fake_email(name, organisation):
+            if name:
+                return urllib.parse.quote(' '.join([name, organisation])) + '@missing.leeds2023.co.uk'
+            return None
+
+        if not record.get('Email', ''):
+            record = add_fields(record, {
+                'Email': make_fake_email(record.get('Main Contact', None), record.get('Name', '')),
+            })
+
+        if not record.get('Email.'):
+            record = add_fields(record, {
+                'Email.': make_fake_email(record.get('Secondary Contact', None), record.get('Name', '')),
+            })
 
         record = extract_and_leave_ref(
             record, ['Main contact', 'Role', 'Email'], 'Main Contact', 'Email', contacts)
