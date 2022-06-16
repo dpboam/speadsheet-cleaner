@@ -7,8 +7,16 @@ import os
 import urllib.parse
 
 
-logging.basicConfig(level=logging.DEBUG)
+logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger()
+
+
+def make_fake_email(name, organisation):
+    if name:
+        fake_email = urllib.parse.quote(' '.join([name, organisation])) + '@missing.leeds2023.co.uk'
+        logging.debug('Creating fake email for %s = %s', name, fake_email)
+        return fake_email
+    return None
 
 
 def process_staff_data():
@@ -33,14 +41,9 @@ def process_staff_data():
 
         record = drop_fields(record, ['Relationship Type2'])
 
-        def make_fake_email(name, organisation):
-            if name:
-                return urllib.parse.quote(' '.join([name, organisation])) + '@missing.leeds2023.co.uk'
-            return None
-
-        if not record.get('Email', ''):
+        if not record.get('Email'):
             record = add_fields(record, {
-                'Email': make_fake_email(record.get('Main Contact', None), record.get('Name', '')),
+                'Email': make_fake_email(record.get('Main contact', None), record.get('Name', '')),
             })
 
         if not record.get('Email.'):
@@ -77,7 +80,8 @@ def process_staff_data():
             "Martijn de Lange": ["Martin", "de Lange"],
             "Professor Charles Egbu": ["Charles", "Egbu (Professor)"],
             "Dr Edward Ziff": ["Edward", "Ziff (Dr)"],
-            "Sharon Watson MBE, DL": ["Sharon", "Watson (MBE, DL)"]
+            "Sharon Watson MBE, DL": ["Sharon", "Watson (MBE, DL)"],
+            'Ann Marie Keighley': ['Ann Marie', 'Keighley'],
         })
 
         contact = add_fields(contact, {
