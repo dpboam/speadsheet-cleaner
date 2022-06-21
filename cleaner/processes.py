@@ -2,8 +2,8 @@ import logging
 import re
 from .util import clean_row
 
-
 logger = logging.getLogger(__name__)
+
 
 def split_name(data, name, exceptions=None):
     if not data or not name in data.keys():
@@ -18,6 +18,14 @@ def split_name(data, name, exceptions=None):
         logger.warn('Wrong length ({})'.format(field))
     new_fields = dict(zip(output_names, splits))
     data.update(new_fields)
+    return data
+
+
+def merge(data, fields, output_field, merge_character=';'):
+    values = [data.pop(k, None) for k in fields]
+    field = merge_character.join(
+        [str(v) for v in values if v is not None])
+    data[output_field] = field
     return data
 
 
@@ -37,10 +45,12 @@ def add_fields(data, fields):
 def drop_fields(data, fields):
     return {k: v for k, v in data.items() if k not in fields}
 
+
 def strip_not_none(thing):
     if thing is None:
         return thing
     return thing.strip()
+
 
 def extract_and_leave_ref(data, fields_to_extract, field_name, key_field, reference_data):
     fields = {k: strip_not_none(data.pop(k, None)) for k in fields_to_extract}
