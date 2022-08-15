@@ -85,7 +85,7 @@ def process():
 
 def process_20220812():
     os.chdir('./data')
-    input_file = 'CRM-0004-consolidated-20220812.xlsx'
+    input_file = os.path.join(source_path, 'CRM-0004-consolidated-20220812.xlsx')
     people_preload = load_sheet(
         input_file, 'People Preload')
     organisations = load_sheet(
