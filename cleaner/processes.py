@@ -75,3 +75,12 @@ def rename_fields(data, name_mapper):
                             for old_key, new_key in name_mapper.items() if old_key in data.keys()})
     data.update(new_fields)
     return data
+
+def clean_field_names(data):
+    cleaned = {key: re.sub(r'\s+', ' ', key).strip() for key in data.keys()}
+    return rename_fields(data, cleaned)
+
+def clean_values(data, name, null_values=[]):
+    if data.get(name) in null_values:
+        del data[name]
+    return data
